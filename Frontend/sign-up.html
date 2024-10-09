@@ -34,20 +34,30 @@
         </footer>
         <script src="ferchS.js"></script>
         <script>
-            const form = document.getElementById('registerForm');
-            const password = document.getElementById('password');
-            const confirmPassword = document.getElementById('confirmPassword');
-            const errorMessage = document.getElementById('errorMessage');
-          
-            form.addEventListener('submit', function(event) {
-              // Previene el envío del formulario si las contraseñas no coinciden
-              if (password.value !== confirmPassword.value) {
-                event.preventDefault();
-                errorMessage.textContent = "Contraseñas no coinciden.";
-              } else {
-                errorMessage.textContent = "";  // Limpia el mensaje si coinciden
-              }
-            });
-          </script>
+            document.getElementById('submit').onclick = function() {
+                // Obtener los valores de los campos del formulario
+                const name = document.getElementById('name').value;
+                const lastname = document.getElementById('lastname').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const errorMessage = document.getElementById('errorMessage');
+    
+                // Validación de los campos vacíos
+                if (!name || !lastname || !email || !password || !confirmPassword) {
+                    return; // Salir de la función sin redirigir
+                }
+    
+                // Validación de coincidencia de contraseñas
+                if (password !== confirmPassword) {
+                    event.preventDefault();
+                        errorMessage.textContent = "Contraseñas no coinciden.";
+                    return; // Salir de la función sin redirigir
+                }
+    
+                // Si todas las validaciones pasan, redirigir a la nueva vista
+                window.location.href = "log-in.html";
+            };
+        </script>
     </body>
 </html>
