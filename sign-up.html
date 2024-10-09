@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign.up |MoneyWase</title>
+    <link  rel="stylesheet" href="SL-styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0" rel="stylesheet"/>
+    </head>
+    <body>
+        <header class="navbar">
+            <div class="logo">
+                <span class="material-icons-sharp" style="font-size: 2em;">
+                    account_balance_wallet
+                </span>Moneywase</div>
+        </header>
+        <div class="sign-up">
+            <form id="registerForm" class="form">
+                <h2>Crear cuenta</h2>
+                <div>
+                    <input type="text" id="name" placeholder="Nombre" size="20" required>
+                    <input type="text" id="lastname" placeholder="Apellido" size="20" required>
+                </div>
+                <input type="email" id="email" placeholder="your@email.com" size="40" required>
+                <input type="password" id="password" placeholder="contraseña" size="20" required>
+                <input type="password" id="confirmPassword" placeholder="confirme su contraseña" size="20" required>
+                <input type="submit" value="Crear cuenta">
+                <p id="errorMessage"></p>
+            </form> 
+        </div>
+        <footer>
+            <p>Derechos reservados MoneyWase S.A Chile.</p>
+        </footer>
+        <script src="ferchS.js"></script>
+        <script>
+            const form = document.getElementById('registerForm');
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmPassword');
+            const errorMessage = document.getElementById('errorMessage');
+          
+            form.addEventListener('submit', function(event) {
+              // Previene el envío del formulario si las contraseñas no coinciden
+              if (password.value !== confirmPassword.value) {
+                event.preventDefault();
+                errorMessage.textContent = "Contraseñas no coinciden.";
+              } else {
+                errorMessage.textContent = "";  // Limpia el mensaje si coinciden
+              }
+            });
+          </script>
+    </body>
+</html>
