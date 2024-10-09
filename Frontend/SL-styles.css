@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+*{
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif;
+}
+body{
+    background-color: #dcf4ce;
+    height: 100vh;
+}
+
+header{
+    background-color: #dcf4ce;
+    height: 10vh;
+    padding: 2vh;
+    display: flex;
+    align-items: flex-end;
+    flex-direction: row;
+}
+
+.navbar {
+    width: auto;
+    height: 10vh;
+    background-color: #34757180; /* Color verde para la barra superior */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    
+}
+
+.logo {
+    font-size: 24px;
+    color: #347571;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.2em;
+}
+
+
+.sign-up{
+    background-color: #34757180;
+    width: 30%;
+    height: 65vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3em;
+    margin: 5% auto;
+}
+.sign-up .form{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 70%;
+}
+
+.sign-up .form div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.sign-up .form h2{
+    color: #dcf4ce;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif ;
+}
+.sign-up .form input{
+    color: #dcf4ce;
+    width: 100%;
+    margin: 2vh 2px;
+    padding: 5%;
+    border: 0;
+    border-radius: 18px;
+    box-sizing: border-box;
+    outline: 0;
+    font-family: source system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #347571;
+}
+
+.sign-up .form p{
+    color:red;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 0.5m;
+    margin: auto;
+}
+
+::placeholder{
+    color: #dcf4ce;
+}
+
+footer{
+    background-color: #34757180;
+    height: 10vh;
+    width: 100vw;
+    text-align: center;
+    padding: 2vh  0;
+    position: absolute;
+    bottom: 0;    
+}
+
+a{
+    text-decoration: none;
+    color: #dcf4ce;
+    margin: auto;
+}
