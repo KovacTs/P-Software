@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const { Client } = require('pg'); // Librería de PostgreSQL
 const bcrypt = require('bcryptjs'); //libreria para a encriptacion de datos, tales como contraseñas
+const session = require('express-session');
 
 const app = express();
 
@@ -9,6 +10,18 @@ const app = express();
 app.listen(3000, () => {
   console.log('Servidor corriendo en http://localhost:3000');
 });
+
+
+// Configurar express-session 
+//(verificar si este es la fuente del problema de Redireccionamiento al vista MoneyWase)
+app.use(
+  session({
+    secret: 'mi_secreto_super_seguro',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false, maxAge: 10000 } // maxAge: tiempo en milisegundos (ejemplo: 1 minuto = 60000)
+  })
+);
 
 
 // Middleware para parsear JSON
@@ -28,16 +41,16 @@ app.get('/Crear-cuenta', (req, res) => {
 app.get('/Iniciar-sesion', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/public/log-in.html'));
 });
-app.get('/MoneyWase', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/public/Panel.html'));
-});
+/*app.get('/MoneyWase', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/public/MoneyWase.html'));
+});*/
 
 
 // Configuración de la conexión a la base de datos PostgreSQl
 const client = new Client({
   user: 'postgres', // usuario que creaste
   host: 'localhost',
-  database: 'MoneyWase', // nombre de tu base de datos                                 (CAMBIAR BASE DE DATOS)
+  database: 'MoneyWase', // nombre de tu base de datos   
   password: '302242', // contraseña que configuraste
   port: 5432, // puerto predeterminado de PostgreSQL
 });
@@ -55,6 +68,7 @@ client.connect((err) => {
 app.post('/Crear-cuenta', async (req, res) => {
   const { name, lastname, email, password, confirmPassword } = req.body;
   console.log('Solicitud recibida en el backend con estos datos:', req.body); //ELIMINAR MÁS ADELANTE
+  
   // Verificar que las contraseñas coincidan
   if (password !== confirmPassword) {
     return res.status(400).json({ message: 'Las contraseñas no coinciden.' });
@@ -63,7 +77,7 @@ app.post('/Crear-cuenta', async (req, res) => {
     // Encriptar la contraseña usando bcryptjs
     const hashedPassword = await bcrypt.hash(password, 10); // 10 = número de salt rounds
     // Crear un nuevo usuario en la base de datos
-    await client.query('INSERT INTO public.usuarios (nombre, apellido, correo, contrasena) VALUES ($1, $2, $3, $4)', [name, lastname, email, hashedPassword]);
+    await client.query('INSERT INTO public.users (name, lastname, email, password) VALUES ($1, $2, $3, $4)', [name, lastname, email, hashedPassword]);
     //res.send('Usuario registrado exitosamente con bcryptjs');
     console.log('Usuario registrado exitosamente con bcryptjs');
   } catch (error) {
@@ -72,26 +86,57 @@ app.post('/Crear-cuenta', async (req, res) => {
   }
 });
 
+// Función para obtener el usuario desde la base de datos
+async function getUserFromDatabase(email) {
+  console.log("Entrando a getUserFromDatabase");
+  try {
+    const result = await client.query('SELECT * FROM public.users WHERE email = $1', [email]);
+    return result.rows[0];  // Devolver el primer usuario encontrado (si existe)
+  } catch (error) {
+    console.error('Error consultando la base de datos:', error);
+    throw error;
+  }
+}
+
 app.post('/Iniciar-sesion', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const result = await client.query('SELECT * FROM users WHERE email = $1', [email]);
+    console.log("Antes de llamar a getUserFromDatabase");
+    const user = await getUserFromDatabase(email);
+    console.log("Después de llamar a getUserFromDatabase");
 
-    if (result.rows.length > 0) {
-      // Comparar la contraseña ingresada con la encriptada en la base de datos
-      const isValid = await bcrypt.compare(password, result.rows[0].password);
-      if (isValid) {
-        res.send('Inicio de sesión exitoso con bcryptjs');
-      } else {
-        res.status(401).send('Contraseña incorrecta');
-      }
-    } else {
-      res.status(404).send('Usuario no encontrado');
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
     }
+
+    const match = await bcrypt.compare(password, user.password);
+
+    if (!match) {
+      return res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
+    }
+
+    // Iniciar la sesión y enviar la respuesta de éxito
+    req.session.user = user;
+    console.log('Redirecting to /MoneyWase')
+    return res.redirect('/MoneyWase');
+    //return res.json({ success: true, redirectUrl: '/MoneyWase' });
   } catch (error) {
-    res.status(500).send('Error al iniciar sesión');
+    console.error('Error al iniciar sesión:', error);
+    return res.status(500).json({ success: false, message: 'Error en el servidor' });
   }
+
 });
 
-
+// Ruta protegida para el software principal
+app.get('/MoneyWase', (req, res) => {
+  console.log("Entrando a get/MoneyWase")
+  if (req.session.user) {
+    console.log(`Bienvenido, ${req.session.user.name}`);
+    const filePath = path.join(__dirname, '../frontend/public/MoneyWase.html');
+      console.log('Ruta del archivo HTML:', filePath);
+      return res.sendFile(filePath);
+  } else {
+    return res.redirect('/');//  Redireccionar al metodo iniciar  sesion
+  }
+});
