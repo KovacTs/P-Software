@@ -5,7 +5,7 @@ frondend/ html css .js que mantienen operatividad y comunicaciones con el backen
 
 app.js hace el levantamiento de server en localhost:3000/
 dependencias:
-  nmp install express
+  npm install express
               pg 
               bcryptjs
               express-session
