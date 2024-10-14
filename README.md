@@ -10,6 +10,8 @@ dependencias:
               bcryptjs
               express-session
               
+Dentro de la carpeta del proyecto colocarse en la carpeta backend (cd backend), instalar dependencias y ejecutar "node app.js" para el levantamiento
+
 
 archivos fetch.js en el frondend establecen comunicaciones con el backend
 
