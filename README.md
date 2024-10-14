@@ -4,6 +4,12 @@ backend/ archivos .js que mantienen la operacion del servidor
 frondend/ html css .js que mantienen operatividad y comunicaciones con el backend 
 
 app.js hace el levantamiento de server en localhost:3000/
+dependencias:
+  nmp install express
+              pg 
+              bcryptjs
+              express-session
+              
 
 archivos fetch.js en el frondend establecen comunicaciones con el backend
 
