@@ -10,6 +10,12 @@ loginForm.addEventListener('submit', async (event) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
   });
-  const message = await response.text();
-  alert(message); // Muestra la respuesta del backend
+  
+  if (response.redirected) {
+    // Si hay una redirección, cambiar la ubicación
+    window.location.href = response.url;
+  } else {
+    const message = await response.text();
+    alert(message); // Muestra el mensaje de error si no hubo redirección
+  }
 });
