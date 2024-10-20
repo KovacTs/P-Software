@@ -4,6 +4,7 @@ const { Client } = require('pg'); // Librería de PostgreSQL
 const bcrypt = require('bcryptjs'); //libreria para a encriptacion de datos, tales como contraseñas
 const session = require('express-session');
 
+
 const app = express();
 
 // Servidor escucha en el puerto 3000
@@ -19,7 +20,7 @@ app.use(
     secret: 'mi_secreto_super_seguro',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false, maxAge: 10000 } // maxAge: tiempo en milisegundos (ejemplo: 1 minuto = 60000)
+    cookie: { secure: false, maxAge: 60000 } // maxAge: tiempo en milisegundos (ejemplo: 1 minuto = 60000)
   })
 );
 
@@ -28,22 +29,18 @@ app.use(
 app.use(express.json()); // Ya no necesitas body-parser separado si usas esta línea
 
 // Configurar la carpeta `frontend/` como estática para servir archivos
-app.use(express.static(path.join(__dirname, '../frontend/public')));
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Rutas específicas para archivos en la subcarpeta `public/`
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/public/Inicio.html'));
+  res.sendFile(path.join(__dirname, '../frontend/Inicio.html'));
 });
-
 app.get('/Crear-cuenta', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/public/sign-up.html'));
+  res.sendFile(path.join(__dirname, '../frontend/sign-up.html'));
 });
 app.get('/Iniciar-sesion', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/public/log-in.html'));
+  res.sendFile(path.join(__dirname, '../frontend/log-in.html'));
 });
-/*app.get('/MoneyWase', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/public/MoneyWase.html'));
-});*/
 
 
 // Configuración de la conexión a la base de datos PostgreSQl
@@ -77,6 +74,7 @@ app.post('/Crear-cuenta', async (req, res) => {
     // Encriptar la contraseña usando bcryptjs
     const hashedPassword = await bcrypt.hash(password, 10); // 10 = número de salt rounds
     // Crear un nuevo usuario en la base de datos
+    console.log(name, lastname, email, hashedPassword);
     await client.query('INSERT INTO public.users (name, lastname, email, password) VALUES ($1, $2, $3, $4)', [name, lastname, email, hashedPassword]);
     //res.send('Usuario registrado exitosamente con bcryptjs');
     console.log('Usuario registrado exitosamente con bcryptjs');
@@ -130,12 +128,10 @@ app.post('/Iniciar-sesion', async (req, res) => {
 
 // Ruta protegida para el software principal
 app.get('/MoneyWase', (req, res) => {
-  console.log("Entrando a get/MoneyWase")
+  
   if (req.session.user) {
-    console.log(`Bienvenido, ${req.session.user.name}`);
-    const filePath = path.join(__dirname, '../frontend/public/MoneyWase.html');
-      console.log('Ruta del archivo HTML:', filePath);
-      return res.sendFile(filePath);
+    
+     return res.sendFile(path.join(__dirname, '../frontend/MoneyWase.html'));
   } else {
     return res.redirect('/');//  Redireccionar al metodo iniciar  sesion
   }
