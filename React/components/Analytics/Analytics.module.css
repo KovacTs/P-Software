@@ -1,0 +1,17 @@
+.analytics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: space-around;
+}
+
+.chartBar {
+  width: 80%;
+  max-width: 600px;
+  margin: auto;
+}
+
+.chartDoughnut {
+  width: 80%;
+  max-width: 600px;
+  margin: auto;
+}
