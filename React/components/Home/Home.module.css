@@ -1,0 +1,59 @@
+.home {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: space-around;
+}
+.home h2 {
+  margin-top: 1em;
+}
+.home p {
+  font-size: 1em;
+}
+
+.home .welcome {
+  font-size: 1.5em;
+  width: auto;
+  background-color: azure;
+  padding: 10px 30px;
+  height: 12em;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 5px;
+}
+
+.home .profile {
+  font-size: 1.5em;
+  width: auto;
+  background-color: azure;
+  padding: 10px 30px;
+  height: 12em;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.home .balance {
+  font-size: 1.5em;
+  width: auto;
+  background-color: azure;
+  padding: 10px 30px;
+  height: 12em;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 5px;
+}
+
+.home .charBar {
+  font-size: 1.5em;
+  width: auto;
+  background-color: azure;
+  padding: 10px 30px;
+  height: 12em;
+  border-radius: 10px;
+  margin-top: 10px;
+  margin-left: 5px;
+  margin-right: 10px;
+}
